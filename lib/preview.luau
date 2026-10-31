@@ -122,8 +122,76 @@ local function find_target(cx: any): (number?, string?, string?)
 	return nil, nil, nil
 end
 
+local function exists(path: string): boolean
+	local ok, value = pcall(tern.fs.exists, path)
+	return ok and value == true
+end
+
+local function list_dir(path: string): { string }
+	local ok, entries = pcall(tern.fs.list, path)
+	if not ok or type(entries) ~= "table" then
+		return {}
+	end
+	return entries
+end
+
+local function version_number(name: string): number
+	local major, minor, patch = name:match("(%d+)%.(%d+)%.(%d+)")
+	if major then
+		return tonumber(major) * 1000000 + tonumber(minor) * 1000 + tonumber(patch)
+	end
+	return 0
+end
+
 local function node_executable(): string
-	return tern.getenv("TERN_GEODATAVIEWER_NODE") or "node"
+	local configured = tern.getenv("TERN_GEODATAVIEWER_NODE")
+	if configured and configured ~= "" then
+		return configured
+	end
+
+	local candidates: { string } = {
+		"/opt/homebrew/bin/node",
+		"/usr/local/bin/node",
+		"/usr/bin/node",
+		"/snap/bin/node",
+	}
+	local home = tern.getenv("HOME")
+	if home and home ~= "" then
+		table.insert(candidates, home .. "/.local/bin/node")
+		table.insert(candidates, home .. "/.volta/bin/node")
+		table.insert(candidates, home .. "/.asdf/shims/node")
+		table.insert(candidates, home .. "/.local/share/mise/shims/node")
+
+		local nvm = home .. "/.nvm/versions/node"
+		local nvm_versions = list_dir(nvm)
+		table.sort(nvm_versions, function(a, b) return version_number(a) > version_number(b) end)
+		for _, version in nvm_versions do
+			table.insert(candidates, nvm .. "/" .. version .. "/bin/node")
+		end
+
+		local fnm = home .. "/Library/Application Support/fnm/node-versions"
+		local fnm_versions = list_dir(fnm)
+		table.sort(fnm_versions, function(a, b) return version_number(a) > version_number(b) end)
+		for _, version in fnm_versions do
+			table.insert(candidates, fnm .. "/" .. version .. "/installation/bin/node")
+		end
+	end
+
+	local program_files = tern.getenv("ProgramFiles")
+	if program_files then
+		table.insert(candidates, program_files .. "\\nodejs\\node.exe")
+	end
+	local local_app_data = tern.getenv("LOCALAPPDATA")
+	if local_app_data then
+		table.insert(candidates, local_app_data .. "\\Programs\\nodejs\\node.exe")
+	end
+
+	for _, path in candidates do
+		if exists(path) then
+			return path
+		end
+	end
+	return "node"
 end
 
 local function generate(cx: any, path: string, host: string?, pane: number)

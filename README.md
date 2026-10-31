@@ -18,9 +18,11 @@ on a plain background and the page says so.
 ## Requirements
 
 - Tern with plugin support (verified with Tern 0.9.8 on macOS).
-- Node.js 18 or newer on `PATH`. The page generator runs in a child process so a large
-  dataset never blocks Tern's window thread. Set `TERN_GEODATAVIEWER_NODE` to the Node
-  executable when Tern was started without it on `PATH`.
+- Node.js 18 or newer. The page generator runs in a child process so a large dataset
+  never blocks Tern's window thread. Tern started from Finder/Dock often has a minimal
+  `PATH`; the plugin searches `/opt/homebrew/bin`, `/usr/local/bin`, nvm, Volta, asdf,
+  mise, fnm and common Windows locations. Set `TERN_GEODATAVIEWER_NODE` to override the
+  executable.
 
 ## Install
 
