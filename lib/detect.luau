@@ -15,6 +15,12 @@ local EXTENSIONS: { [string]: string } = {
 	shp = "shp",
 	fgb = "fgb",
 	flatgeobuf = "fgb",
+	parquet = "parquet",
+	geoparquet = "parquet",
+	gpkg = "gpkg",
+	tif = "tif",
+	tiff = "tif",
+	cog = "tif",
 	txt = "sniff",
 }
 
@@ -29,7 +35,7 @@ function M.format_for(path: string): string?
 end
 
 function M.supported_names(): string
-	return "GeoJSON, TopoJSON, KML, GPX, WKT, CSV/TSV, Shapefile (.shp) and FlatGeobuf (.fgb)"
+	return "GeoJSON, TopoJSON, KML, GPX, WKT, CSV/TSV, Shapefile (.shp), FlatGeobuf (.fgb), GeoParquet (.parquet), GeoPackage (.gpkg) and GeoTIFF/COG (.tif/.tiff)"
 end
 
 return M

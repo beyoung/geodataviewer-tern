@@ -43,6 +43,8 @@ html, body {
 
 #hud {
   position: absolute;
+  border-top: 2px solid var(--gp-accent);
+  animation: gp-in 240ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
   z-index: 5;
   top: 14px;
   left: 14px;
@@ -83,29 +85,118 @@ html, body {
 
 #layers {
   position: absolute;
+  animation: gp-in 260ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
   z-index: 5;
   top: 14px;
   right: 54px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  max-width: 220px;
+  gap: 4px;
+  max-width: 200px;
+  max-height: calc(100vh - 80px);
+  overflow: auto;
   pointer-events: auto;
 }
 
 #layers:empty { display: none; }
 
-#layers label {
+#legend {
+  position: absolute;
+  z-index: 5;
+  left: 14px;
+  bottom: 42px;
+  width: min(280px, calc(100vw - 28px));
+  max-height: calc(100vh - 210px);
+  overflow: auto;
+  padding: 10px 12px;
+  border: 1px solid var(--gp-border);
+  border-radius: 12px;
+  background: var(--gp-panel);
+  box-shadow: var(--gp-shadow);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  animation: gp-in 280ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+#legend[hidden] { display: none; }
+
+.gp-legend-title {
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gp-legend-sub {
+  margin-top: 1px;
+  color: var(--gp-muted);
+  font-size: 11px;
+}
+
+.gp-legend-items {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.gp-legend-row {
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 6px 9px;
+  min-width: 0;
+  font-size: 11.5px;
+}
+
+.gp-legend-row span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gp-swatch {
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35) inset;
+}
+
+.gp-legend-gradient {
+  margin-top: 8px;
+  height: 8px;
   border: 1px solid var(--gp-border);
-  border-radius: 9px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+}
+
+.gp-legend-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  color: var(--gp-muted);
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes gp-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+#layers label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border: 1px solid var(--gp-border);
+  border-radius: 8px;
   background: var(--gp-panel);
   box-shadow: var(--gp-shadow);
   color: var(--gp-text);
-  font-size: 12px;
+  font-size: 11.5px;
   cursor: pointer;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);

@@ -19,6 +19,8 @@ const [sourceArg, pluginArg, dataArg, tagArg] = process.argv.slice(2);
 const tag = tagArg || "";
 const MAX_TEXT = 64 * 1024 * 1024;
 const MAX_BINARY = 128 * 1024 * 1024;
+const MAX_VECTOR = 256 * 1024 * 1024;
+const MAX_RASTER = 512 * 1024 * 1024;
 
 function fail(message) {
   console.log(JSON.stringify({ ok: false, error: String(message) }));
@@ -37,6 +39,12 @@ const FORMATS = {
   shp: "shp",
   fgb: "fgb",
   flatgeobuf: "fgb",
+  parquet: "parquet",
+  geoparquet: "parquet",
+  gpkg: "gpkg",
+  tif: "tif",
+  tiff: "tif",
+  cog: "tif",
   txt: "sniff",
 };
 
@@ -113,13 +121,13 @@ function escapeHtml(text) {
   })[ch]);
 }
 
-function main(sourcePath, pluginDir, dataDir, tag) {
+async function main(sourcePath, pluginDir, dataDir, tag) {
   const formatIn = formatFor(sourcePath);
   if (!formatIn) {
     throw new Error(
       "unsupported file type" +
         (extensionOf(sourcePath) ? " ." + extensionOf(sourcePath) : "") +
-        "; supported: GeoJSON, TopoJSON, KML, GPX, WKT, CSV/TSV, Shapefile (.shp) and FlatGeobuf (.fgb)"
+        "; supported: GeoJSON, TopoJSON, KML, GPX, WKT, CSV/TSV, Shapefile (.shp), FlatGeobuf (.fgb), GeoParquet (.parquet), GeoPackage (.gpkg) and GeoTIFF/COG (.tif/.tiff)"
     );
   }
 
@@ -143,6 +151,28 @@ function main(sourcePath, pluginDir, dataDir, tag) {
     if (cpg) meta.cpg = b64(cpg);
   } else if (format === "fgb") {
     meta.fgb = b64(sourcePath);
+  } else if (format === "parquet") {
+    const vector = await import("./vendor/vector.cjs");
+    const readGeoParquet = vector.readGeoParquet || (vector.default && vector.default.readGeoParquet);
+    const layers = await readGeoParquet(readChecked(sourcePath, MAX_VECTOR), {
+      vendorDir: join(pluginDir, "scripts", "vendor"),
+      name: meta.name,
+    });
+    meta.layers = layers;
+    meta.notes = layers.map((layer) => layer.note).filter(Boolean);
+  } else if (format === "gpkg") {
+    const vector = await import("./vendor/vector.cjs");
+    const readGeoPackage = vector.readGeoPackage || (vector.default && vector.default.readGeoPackage);
+    const layers = await readGeoPackage(readChecked(sourcePath, MAX_VECTOR), {
+      vendorDir: join(pluginDir, "scripts", "vendor"),
+    });
+    meta.layers = layers;
+    meta.notes = layers.map((layer) => layer.note).filter(Boolean);
+  } else if (format === "tif") {
+    const raster = await import("./vendor/raster.cjs");
+    const readGeoTiff = raster.readGeoTiff || (raster.default && raster.default.readGeoTiff);
+    meta.raster = await readGeoTiff(readChecked(sourcePath, MAX_RASTER), { maxSize: 1600 });
+    meta.notes = meta.raster.note ? [meta.raster.note] : [];
   } else {
     meta.source_b64 = readChecked(sourcePath, MAX_TEXT).toString("base64");
   }
@@ -165,6 +195,7 @@ function main(sourcePath, pluginDir, dataDir, tag) {
     "<div id=\"hud\"><div id=\"hud-title\">", title, "</div>",
     "<div id=\"hud-stats\">Loading…</div></div>\n",
     "<div id=\"layers\"></div>\n",
+    "<div id=\"legend\" hidden></div>\n",
     "<div id=\"overlay\" hidden><div id=\"overlay-title\"></div>",
     "<div id=\"overlay-body\"></div></div>\n",
     "<script src=\"", vendor, "maplibre-gl.js\"></script>\n",
@@ -213,7 +244,7 @@ if (!sourceArg || !pluginArg || !dataArg) {
   fail("usage: make_preview.mjs SOURCE PLUGIN_DIR DATA_DIR [WINDOW_TAG]");
 } else {
   try {
-    main(resolve(sourceArg), resolve(pluginArg), resolve(dataArg), tag);
+    await main(resolve(sourceArg), resolve(pluginArg), resolve(dataArg), tag);
   } catch (err) {
     fail(err && err.message ? err.message : err);
   }
