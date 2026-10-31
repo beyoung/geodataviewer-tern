@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Sample places</name>
+    <Placemark>
+      <name>Beihai Park</name>
+      <description>A lake and park in central Beijing.</description>
+      <Point><coordinates>116.386,39.925,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Forbidden City</name>
+      <Polygon>
+        <outerBoundaryIs><LinearRing><coordinates>116.390,39.913,0 116.401,39.913,0 116.401,39.922,0 116.390,39.922,0 116.390,39.913,0</coordinates></LinearRing></outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Document>
+</kml>

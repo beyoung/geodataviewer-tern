@@ -1,0 +1,260 @@
+:root {
+  color-scheme: light dark;
+  --gp-bg: #eef1f5;
+  --gp-panel: rgba(255, 255, 255, 0.92);
+  --gp-border: rgba(23, 32, 48, 0.14);
+  --gp-text: #172030;
+  --gp-muted: #5d6a7e;
+  --gp-accent: #2f6feb;
+  --gp-error: #c92a2a;
+  --gp-shadow: 0 10px 30px rgba(18, 28, 45, 0.16);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --gp-bg: #14181f;
+    --gp-panel: rgba(24, 29, 38, 0.92);
+    --gp-border: rgba(232, 238, 248, 0.16);
+    --gp-text: #e8eef8;
+    --gp-muted: #9aa7ba;
+    --gp-accent: #6ea0ff;
+    --gp-error: #ff8787;
+    --gp-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--gp-bg);
+  color: var(--gp-text);
+  font: 13px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+}
+
+#map {
+  position: absolute;
+  inset: 0;
+  background: var(--gp-bg);
+}
+
+#hud {
+  position: absolute;
+  z-index: 5;
+  top: 14px;
+  left: 14px;
+  max-width: min(420px, calc(100vw - 70px));
+  padding: 12px 14px;
+  border: 1px solid var(--gp-border);
+  border-radius: 12px;
+  background: var(--gp-panel);
+  box-shadow: var(--gp-shadow);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  pointer-events: none;
+}
+
+#hud-title {
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#hud-stats {
+  margin-top: 2px;
+  color: var(--gp-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.gp-note {
+  margin-top: 7px;
+  padding-top: 7px;
+  border-top: 1px solid var(--gp-border);
+  color: var(--gp-muted);
+  font-size: 11.5px;
+}
+
+#layers {
+  position: absolute;
+  z-index: 5;
+  top: 14px;
+  right: 54px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 220px;
+  pointer-events: auto;
+}
+
+#layers:empty { display: none; }
+
+#layers label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 9px;
+  border: 1px solid var(--gp-border);
+  border-radius: 9px;
+  background: var(--gp-panel);
+  box-shadow: var(--gp-shadow);
+  color: var(--gp-text);
+  font-size: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  user-select: none;
+}
+
+#layers input {
+  accent-color: var(--gp-accent);
+  margin: 0;
+}
+
+.gp-dot {
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35) inset;
+}
+
+#layers span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#overlay {
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(520px, calc(100vw - 48px));
+  max-height: min(70vh, 560px);
+  overflow: auto;
+  padding: 18px 20px;
+  border: 1px solid var(--gp-border);
+  border-radius: 14px;
+  background: var(--gp-panel);
+  box-shadow: var(--gp-shadow);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+#overlay[hidden] { display: none; }
+
+#overlay.is-error #overlay-title { color: var(--gp-error); }
+
+#overlay-title {
+  font-size: 15px;
+  font-weight: 650;
+}
+
+#overlay-body {
+  margin-top: 8px;
+  color: var(--gp-muted);
+  font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* MapLibre chrome tuned to the panel palette. */
+.maplibregl-ctrl-group {
+  border: 1px solid var(--gp-border) !important;
+  border-radius: 10px !important;
+  background: var(--gp-panel) !important;
+  box-shadow: var(--gp-shadow) !important;
+  overflow: hidden;
+}
+
+.maplibregl-ctrl-group button { background: transparent !important; }
+.maplibregl-ctrl-group button + button { border-top: 1px solid var(--gp-border) !important; }
+.maplibregl-ctrl-group button span { filter: none; }
+
+.maplibregl-ctrl-attrib {
+  background: var(--gp-panel) !important;
+  color: var(--gp-muted) !important;
+  border-radius: 7px 0 0 0;
+  font-size: 10.5px;
+}
+
+.maplibregl-ctrl-attrib a { color: var(--gp-muted) !important; }
+
+.maplibregl-ctrl-scale {
+  border-color: var(--gp-muted) !important;
+  color: var(--gp-muted) !important;
+  background: var(--gp-panel) !important;
+  border-radius: 4px;
+}
+
+/* Popups */
+.maplibregl-popup-content {
+  padding: 0 !important;
+  border: 1px solid var(--gp-border);
+  border-radius: 11px !important;
+  background: var(--gp-panel) !important;
+  color: var(--gp-text) !important;
+  box-shadow: var(--gp-shadow) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.maplibregl-popup-tip { border-top-color: var(--gp-panel) !important; }
+.maplibregl-popup-close-button { color: var(--gp-muted) !important; font-size: 17px; }
+
+.gp-popup {
+  max-height: 360px;
+  overflow: auto;
+  padding: 12px 14px;
+  font: 12px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+}
+
+.gp-popup-title {
+  font-size: 13px;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+.gp-popup-sub {
+  margin-top: 2px;
+  color: var(--gp-muted);
+  font-size: 11px;
+}
+
+.gp-popup-empty {
+  margin-top: 8px;
+  color: var(--gp-muted);
+  font-size: 11.5px;
+}
+
+.gp-props {
+  margin-top: 9px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.gp-props th,
+.gp-props td {
+  padding: 4px 0;
+  border-top: 1px solid var(--gp-border);
+  vertical-align: top;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.gp-props th {
+  width: 38%;
+  padding-right: 12px;
+  color: var(--gp-muted);
+  font-weight: 500;
+}
+
+.gp-props td { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }

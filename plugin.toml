@@ -1,0 +1,7 @@
+schema = 1
+id = "geodataviewer"
+name = "geodataviewer"
+version = "0.1.0"
+description = "Preview GeoJSON, TopoJSON, KML, GPX, WKT, CSV, Shapefile and FlatGeobuf files on a MapLibre map."
+icon = "globe"
+window = "window.luau"

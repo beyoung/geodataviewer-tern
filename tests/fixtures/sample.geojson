@@ -1,0 +1,31 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Central park", "kind": "park" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[116.33,39.88],[116.47,39.88],[116.47,39.96],[116.33,39.96],[116.33,39.88]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Ring road", "kind": "road" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[116.30,39.90],[116.36,39.93],[116.42,39.91],[116.50,39.94]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Tiananmen", "kind": "landmark", "visitors": 14000000 },
+      "geometry": { "type": "Point", "coordinates": [116.397,39.908] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Temple of Heaven", "kind": "landmark" },
+      "geometry": { "type": "Point", "coordinates": [116.410,39.882] }
+    }
+  ]
+}
