@@ -24,13 +24,13 @@ on a plain background and the page says so.
 For a checkout:
 
 ```sh
-tern plugin link /path/to/tern-geodata-plugin
+tern plugin link /path/to/geodataviewer-tern
 ```
 
 From a repository:
 
 ```sh
-tern plugin install github.com/OWNER/tern-geodata-plugin
+tern plugin install github.com/beyoung/geodataviewer-tern
 ```
 
 `tern plugin list` should show `geodataviewer ... window ready`.
