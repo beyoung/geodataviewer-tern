@@ -1,7 +1,7 @@
 schema = 1
 id = "geodataviewer"
 name = "geodataviewer"
-version = "0.2.1"
+version = "0.2.2"
 description = "Preview vector geodata and GeoTIFF/COG imagery on a MapLibre map."
 icon = "globe"
 window = "window.luau"

@@ -6,7 +6,7 @@ Preview vector geodata and GeoTIFF/COG imagery on an interactive map, inside Ter
 
 Open a GeoJSON, TopoJSON, KML, GPX, WKT, CSV, Shapefile, FlatGeobuf, GeoParquet,
 GeoPackage or GeoTIFF/COG file and press
-<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd> (or run **Preview geodata on a map** from
+<kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> (or run **Preview geodata on a map** from
 the command palette). A browser picture-in-picture opens over the file with the data
 drawn on a [MapLibre GL JS](https://maplibre.org/) map. Click a vector feature to inspect
 its properties. GeoTIFF/COG images are drawn as a georeferenced raster overlay.
@@ -43,7 +43,7 @@ tern plugin install github.com/beyoung/geodataviewer-tern
 ## Usage
 
 1. Open a supported file in Tern (a file block, or Tern's table view for CSV).
-2. Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>, or run **Preview geodata on a map**
+2. Press <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>, or run **Preview geodata on a map**
    from the command palette (action `plugin.geodataviewer.preview`).
 3. Click vector features to see their properties. Pan and zoom with the mouse.
 
@@ -54,7 +54,9 @@ You can also select a geodata file in the Files pane and click the globe button
 **Preview on a map** in its header.
 
 To change the shortcut, bind `plugin.geodataviewer.preview` in Tern's keyboard settings
-(the default chord is `ctrl+shift+g`).
+(the default chord is `cmd+shift+v`). Tern reserves that chord in its preset, so the
+plugin installs it once as a user keybind; an existing binding you already chose for the
+chord is left alone.
 
 ## Rendering
 
